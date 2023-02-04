@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "/Users/firattale/Desktop/Projects/molecule-ip-nft/backend/contracts/IPNFTContract.sol": {
-      "lastModificationDate": 1675545001440,
-      "contentHash": "28c654dbab87cf333ea1032a570ec1f9",
+      "lastModificationDate": 1675546386976,
+      "contentHash": "9924062355adbf1d6637b45ff9acc2b0",
       "sourceName": "contracts/IPNFTContract.sol",
       "solcConfig": {
         "version": "0.8.9",

@@ -17,25 +17,25 @@ contract IP_NFTContract is Ownable, ERC721URIStorage {
     struct ContractData {
         string contractData;
         string description;
-        string name;
     }
 
     event NewMinter(address indexed _minter);
     event RevokedMinter(address indexed _minter);
-    event NewToken(uint256 indexed tokenId);
-
-    constructor() ERC721("IP_NFTContract", "IP-NFT") {}
+    event NewToken(address indexed _minter, uint256 indexed tokenId);
 
     modifier hasBrightlisted() {
         require(brightlist[_msgSender()], "NOT_IN_WHITELIST");
         _;
     }
 
+    constructor() ERC721("IP_NFTContract", "IP-NFT") {}
+
     /**
      * @notice Add to brightlist
      */
     function addToBrightlist(address _userAddress) public onlyOwner {
         brightlist[_userAddress] = true;
+        emit NewMinter(_userAddress);
     }
 
     /**
@@ -43,14 +43,25 @@ contract IP_NFTContract is Ownable, ERC721URIStorage {
      */
     function removeFrombrightlist(address _userAddress) public onlyOwner {
         delete brightlist[_userAddress];
+        emit RevokedMinter(_userAddress);
     }
 
-    function safeMint(address _to, string memory uri) public hasBrightlisted {
+    function safeMint(
+        address _to,
+        string memory _description,
+        string memory _contractData
+    ) public hasBrightlisted {
         uint256 tokenId = _tokenIdCounter.current();
         _tokenIdCounter.increment();
+        uint256 newTokenId = _tokenIdCounter.current();
+
+        contractData[newTokenId].description = _description;
+        contractData[newTokenId].contractData = _contractData;
+
         removeFrombrightlist(_to);
         _safeMint(_to, tokenId);
-        _setTokenURI(tokenId, uri);
+
+        emit NewToken(_to, newTokenId);
     }
 
     function tokenURI(
@@ -64,8 +75,8 @@ contract IP_NFTContract is Ownable, ERC721URIStorage {
             bytes(
                 string(
                     abi.encodePacked(
-                        '{"name":',
-                        _contractData.name,
+                        '{"name":token #',
+                        _tokenIdCounter.current(),
                         '"description":',
                         _contractData.description,
                         '"contractData":',
