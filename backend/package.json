@@ -6,8 +6,8 @@
 		"build": "npx hardhat compile",
 		"test": "npx hardhat test",
 		"coverage": "npx hardhat coverage",
-		"deploy-testnet": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network ETH_GOERLI",
-		"deploy": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network ETH_MAINNET",
+		"deploy-testnet": "npx hardhat run --network goerli scripts/IPNFTContract_deploy.js",
+		"deploy": "npx hardhat run --network mainnet scripts/IPNFTContract_deploy.js",
 		"deploy-local": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network localhost",
 		"node": "npx hardhat node"
 	},
@@ -19,6 +19,7 @@
 	},
 	"devDependencies": {
 		"@nomicfoundation/hardhat-toolbox": "^2.0.1",
+		"@nomiclabs/hardhat-etherscan": "^3.1.5",
 		"hardhat": "^2.12.6"
 	}
 }

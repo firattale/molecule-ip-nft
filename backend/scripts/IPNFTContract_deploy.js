@@ -1,7 +1,7 @@
 const hre = require("hardhat");
 
 async function main() {
-	const Contract = await hre.ethers.getContractFactory("IPNFTContract");
+	const Contract = await hre.ethers.getContractFactory("IP_NFTContract");
 	const contract = await Contract.deploy();
 
 	await contract.deployed();

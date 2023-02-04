@@ -2,16 +2,17 @@ require("@nomicfoundation/hardhat-toolbox");
 require("dotenv").config();
 require("solidity-coverage");
 require("hardhat-docgen");
+require("@nomiclabs/hardhat-etherscan");
 
 module.exports = {
 	solidity: "0.8.9",
 	networks: {
 		hardhat: {},
-		ETH_MAINNET: {
+		mainnet: {
 			accounts: [`${process.env.PRIVATE_KEY}`],
 			url: `https://eth-mainnet.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
 		},
-		ETH_GOERLI: {
+		goerli: {
 			accounts: [`${process.env.PRIVATE_KEY}`],
 			url: `https://eth-goerli.g.alchemy.com/v2/${process.env.ALCHEMY_API_KEY}`,
 		},
