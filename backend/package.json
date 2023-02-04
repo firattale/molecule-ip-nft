@@ -4,14 +4,18 @@
 	"private": true,
 	"scripts": {
 		"build": "npx hardhat compile",
+		"test": "npx hardhat test",
+		"coverage": "npx hardhat coverage",
 		"deploy-testnet": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network ETH_GOERLI",
 		"deploy": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network ETH_MAINNET",
-		"node": "npx hardhat node",
-		"deploy-local": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network localhost"
+		"deploy-local": "npx hardhat run ./scripts/IPNFTContract_deploy.js --network localhost",
+		"node": "npx hardhat node"
 	},
 	"dependencies": {
+		"@openzeppelin/contracts": "^4.8.1",
 		"dotenv": "^16.0.3",
-		"@openzeppelin/contracts": "^4.8.1"
+		"hardhat-docgen": "^1.3.0",
+		"solidity-coverage": "^0.8.2"
 	},
 	"devDependencies": {
 		"@nomicfoundation/hardhat-toolbox": "^2.0.1",

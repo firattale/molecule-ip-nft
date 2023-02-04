@@ -10,9 +10,9 @@ my-create-web3-dapp/
 my-dapp-[0-9]/
 .DS_Store
 
-**/cache/
+cache/
 artifacts/
-
+artifacts/build-info
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 .prettierignore
