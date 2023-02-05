@@ -15,9 +15,11 @@
 		"@emotion/styled": "^11.10.5",
 		"@rainbow-me/rainbowkit": "^0.8.1",
 		"alchemy-sdk": "^2.4.1",
+		"buffer": "^6.0.3",
 		"crypto-js": "^4.1.1",
 		"formik": "^2.2.9",
 		"framer-motion": "^9.0.1",
+		"ipfs-http-client": "^60.0.0",
 		"next": "13.1.6",
 		"react": "18.2.0",
 		"react-dom": "18.2.0"
