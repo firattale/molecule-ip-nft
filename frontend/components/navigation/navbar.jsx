@@ -6,7 +6,7 @@ export default function Navbar() {
 			<a href="https://molecule.to/" target={"_blank"}>
 				<img className={styles.alchemy_logo} src="/molecule_logo.svg"></img>
 			</a>
-			<ConnectButton></ConnectButton>
+			<ConnectButton />
 		</nav>
 	);
 }

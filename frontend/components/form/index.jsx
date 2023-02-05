@@ -1,12 +1,10 @@
 import { Field, Form, Formik } from "formik";
 import { Button, FormControl, FormLabel, Input, FormErrorMessage } from "@chakra-ui/react";
 export default function NFTForm() {
-	function validateName(value) {
+	function validatePatentID(value) {
 		let error;
-		if (!value) {
-			error = "Name is required";
-		} else if (value.toLowerCase() !== "naruto") {
-			error = "Jeez! You're not a fan 😱";
+		if (!/^[A-F]-[1-9]{5,7}\/[A-Z]{5,9}$/i.test(value)) {
+			error = "Invalid patent ID";
 		}
 		return error;
 	}
@@ -16,63 +14,69 @@ export default function NFTForm() {
 			initialValues={{}}
 			onSubmit={(values, actions) => {
 				setTimeout(() => {
-					alert(JSON.stringify(values, null, 2));
+					console.log(values);
 					actions.setSubmitting(false);
-				}, 1000);
+					actions.resetForm({});
+				}, 500);
 			}}
 		>
-			{(props) => (
-				<Form>
-					<Field name="cure">
-						{({ field, form }) => (
-							<FormControl isInvalid={form.errors.cure && form.touched.cure} isRequired>
-								<FormLabel>Cure</FormLabel>
-								<Input {...field} />
-								<FormErrorMessage>{form.errors.cure}</FormErrorMessage>
-							</FormControl>
-						)}
-					</Field>
-					<Field name="researcher">
-						{({ field, form }) => (
-							<FormControl isInvalid={form.errors.researcher && form.touched.researcher} isRequired>
-								<FormLabel>Researcher</FormLabel>
-								<Input {...field} />
-								<FormErrorMessage>{form.errors.researcher}</FormErrorMessage>
-							</FormControl>
-						)}
-					</Field>
-					<Field name="university">
-						{({ field, form }) => (
-							<FormControl isInvalid={form.errors.university && form.touched.university} isRequired>
-								<FormLabel>University</FormLabel>
-								<Input {...field} />
-								<FormErrorMessage>{form.errors.university}</FormErrorMessage>
-							</FormControl>
-						)}
-					</Field>
-					<Field name="patent_filed.patent_id">
-						{({ field, form }) => (
-							<FormControl isInvalid={form.errors.patent_id && form.touched.patent_id} isRequired>
-								<FormLabel>Patent ID</FormLabel>
-								<Input {...field} placeholder="e.g. A-12345/CANCER" />
-								<FormErrorMessage>{form.errors.patent_id}</FormErrorMessage>
-							</FormControl>
-						)}
-					</Field>
-					<Field name="patent_filed.institution">
-						{({ field, form }) => (
-							<FormControl isInvalid={form.errors.institution && form.touched.institution} isRequired>
-								<FormLabel>Institution</FormLabel>
-								<Input {...field} />
-								<FormErrorMessage>{form.errors.institution}</FormErrorMessage>
-							</FormControl>
-						)}
-					</Field>
-					<Button mt={4} colorScheme="teal" isLoading={props.isSubmitting} type="submit">
-						Submit
-					</Button>
-				</Form>
-			)}
+			{({ errors, isSubmitting, touched }) => {
+				return (
+					<Form>
+						<Field name="cure">
+							{({ field }) => (
+								<FormControl isInvalid={errors.cure && touched.cure} isRequired>
+									<FormLabel>Cure</FormLabel>
+									<Input {...field} />
+									<FormErrorMessage>{errors.cure}</FormErrorMessage>
+								</FormControl>
+							)}
+						</Field>
+						<Field name="researcher">
+							{({ field }) => (
+								<FormControl isInvalid={errors.researcher && touched.researcher} isRequired>
+									<FormLabel>Researcher</FormLabel>
+									<Input {...field} />
+									<FormErrorMessage>{errors.researcher}</FormErrorMessage>
+								</FormControl>
+							)}
+						</Field>
+						<Field name="university">
+							{({ field }) => (
+								<FormControl isInvalid={errors.university && touched.university} isRequired>
+									<FormLabel>University</FormLabel>
+									<Input {...field} />
+									<FormErrorMessage>{errors.university}</FormErrorMessage>
+								</FormControl>
+							)}
+						</Field>
+						<Field name="patent_filed.patent_id" validate={validatePatentID}>
+							{({ field }) => (
+								<FormControl isInvalid={errors.patent_filed?.patent_id && touched.patent_filed?.patent_id} isRequired>
+									<FormLabel>Patent ID</FormLabel>
+									<Input {...field} placeholder="e.g. A-12345/CANCER" />
+									<FormErrorMessage>{errors.patent_filed?.patent_id}</FormErrorMessage>
+								</FormControl>
+							)}
+						</Field>
+						<Field name="patent_filed.institution">
+							{({ field }) => (
+								<FormControl
+									isInvalid={errors.patent_filed?.institution && touched.patent_filed?.institution}
+									isRequired
+								>
+									<FormLabel>Institution</FormLabel>
+									<Input {...field} />
+									<FormErrorMessage>{errors.patent_filed?.institution}</FormErrorMessage>
+								</FormControl>
+							)}
+						</Field>
+						<Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
+							Submit
+						</Button>
+					</Form>
+				);
+			}}
 		</Formik>
 	);
 }

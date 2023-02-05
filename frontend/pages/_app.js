@@ -35,7 +35,7 @@ const wagmiClient = createClient({
 });
 
 export { WagmiConfig, RainbowKitProvider };
-function MyApp({ Component, pageProps }) {
+function Molecule_IP_NFT_FE({ Component, pageProps }) {
 	return (
 		<ChakraProvider>
 			<WagmiConfig client={wagmiClient}>
@@ -49,4 +49,4 @@ function MyApp({ Component, pageProps }) {
 	);
 }
 
-export default MyApp;
+export default Molecule_IP_NFT_FE;
