@@ -2,6 +2,7 @@ import "../styles/globals.css";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
+import { ChakraProvider } from "@chakra-ui/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
 import {
 	mainnet,
@@ -18,16 +19,7 @@ import { publicProvider } from "wagmi/providers/public";
 import MainLayout from "../layout/mainLayout";
 
 const { chains, provider } = configureChains(
-	[
-		mainnet,
-		goerli,
-		polygon,
-		polygonMumbai,
-		optimism,
-		optimismGoerli,
-		arbitrum,
-		arbitrumGoerli,
-	],
+	[mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli],
 	[alchemyProvider({ apiKey: process.env.ALCHEMY_API_KEY }), publicProvider()]
 );
 
@@ -45,17 +37,15 @@ const wagmiClient = createClient({
 export { WagmiConfig, RainbowKitProvider };
 function MyApp({ Component, pageProps }) {
 	return (
-		<WagmiConfig client={wagmiClient}>
-			<RainbowKitProvider
-				modalSize="compact"
-				initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN}
-				chains={chains}
-			>
-				<MainLayout>
-					<Component {...pageProps} />
-				</MainLayout>
-			</RainbowKitProvider>
-		</WagmiConfig>
+		<ChakraProvider>
+			<WagmiConfig client={wagmiClient}>
+				<RainbowKitProvider modalSize="compact" initialChain={process.env.NEXT_PUBLIC_DEFAULT_CHAIN} chains={chains}>
+					<MainLayout>
+						<Component {...pageProps} />
+					</MainLayout>
+				</RainbowKitProvider>
+			</WagmiConfig>
+		</ChakraProvider>
 	);
 }
 
