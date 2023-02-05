@@ -4,8 +4,38 @@ import { Container } from "@chakra-ui/react";
 import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
 import { useToast } from "@chakra-ui/react";
+import { useContractWrite, usePrepareContractWrite, useContractRead } from "wagmi";
+import { nameConfig, mintConfig } from "../contract";
 
 export default function Home() {
+	// const { data } = useContractRead(config);
+	const { config } = usePrepareContractWrite(mintConfig);
+	const { data, isLoading, isSuccess, write } = useContractWrite({
+		...config,
+		onSuccess(data) {
+			toast({
+				title: "NFT minted.",
+				description: "We've successfully minted your IP_NFT.",
+				status: "success",
+				duration: 3000,
+				position: "top",
+				isClosable: true,
+			});
+			console.log("Success", data);
+		},
+		onError(error) {
+			toast({
+				title: "Something went wrong.",
+				description: "We couldn't minted your NFT, please refresh and try again.",
+				status: "error",
+				duration: 3000,
+				position: "top",
+				isClosable: true,
+			});
+			console.log("Error", error);
+		},
+	});
+
 	const [fileUrl, updateFileUrl] = useState("");
 	const toast = useToast();
 
@@ -42,11 +72,13 @@ export default function Home() {
 		}
 
 		console.log("fileUrl", fileUrl);
+		write?.(cure, fileUrl);
 
 		formActions.setSubmitting(false);
 		formActions.resetForm({
 			values: initialValues,
 		});
+		console.log("data", data);
 	};
 
 	return (

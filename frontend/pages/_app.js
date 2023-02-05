@@ -4,27 +4,18 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { ChakraProvider } from "@chakra-ui/react";
 import { configureChains, createClient, WagmiConfig } from "wagmi";
-import {
-	mainnet,
-	polygon,
-	optimism,
-	arbitrum,
-	goerli,
-	polygonMumbai,
-	optimismGoerli,
-	arbitrumGoerli,
-} from "wagmi/chains";
+import { goerli, hardhat } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
 import MainLayout from "../layout/mainLayout";
 
 const { chains, provider } = configureChains(
-	[mainnet, goerli, polygon, polygonMumbai, optimism, optimismGoerli, arbitrum, arbitrumGoerli],
+	[goerli, hardhat],
 	[alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
-	appName: "My Alchemy DApp",
+	appName: "Molecule IP_NFT",
 	chains,
 });
 
