@@ -4,8 +4,7 @@ const nextConfig = {
 };
 
 module.exports = {
-	env: {
-	},
+	env: {},
 };
 
 module.exports = nextConfig;
