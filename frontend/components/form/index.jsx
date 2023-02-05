@@ -3,7 +3,7 @@ import { Button, FormControl, FormLabel, Input, FormErrorMessage } from "@chakra
 export default function NFTForm() {
 	function validatePatentID(value) {
 		let error;
-		if (!/^[A-F]-[1-9]{5,7}\/[A-Z]{5,9}$/i.test(value)) {
+		if (!/^[A-F]-[1-9]{5,7}\/[A-Z]{5,9}$/.test(value)) {
 			error = "Invalid patent ID";
 		}
 		return error;
@@ -16,13 +16,13 @@ export default function NFTForm() {
 				setTimeout(() => {
 					console.log(values);
 					actions.setSubmitting(false);
-					actions.resetForm({});
+					actions.resetForm({ values: {} });
 				}, 500);
 			}}
 		>
-			{({ errors, isSubmitting, touched }) => {
+			{({ errors, isSubmitting, touched, handleSubmit }) => {
 				return (
-					<Form>
+					<Form onSubmit={handleSubmit}>
 						<Field name="cure">
 							{({ field }) => (
 								<FormControl isInvalid={errors.cure && touched.cure} isRequired>
