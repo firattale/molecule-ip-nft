@@ -1,35 +1,25 @@
 import { Field, Form, Formik } from "formik";
 import { Button, FormControl, FormLabel, Input, FormErrorMessage } from "@chakra-ui/react";
-export default function NFTForm() {
-	function validatePatentID(value) {
+export const initialValues = {
+	cure: "",
+	researcher: "",
+	university: "",
+	patent_filed: {
+		patent_id: "",
+		institution: "",
+	},
+};
+export default function NFTForm({ onSubmit }) {
+	const validatePatentID = (value) => {
 		let error;
 		if (!/^[A-F]-[1-9]{5,7}\/[A-Z]{5,9}$/.test(value)) {
 			error = "Invalid patent ID";
 		}
 		return error;
-	}
+	};
 
 	return (
-		<Formik
-			initialValues={{}}
-			onSubmit={(values, actions) => {
-				setTimeout(() => {
-					console.log(values);
-					actions.setSubmitting(false);
-					actions.resetForm({
-						values: {
-							cure: "",
-							researcher: "",
-							university: "",
-							patent_filed: {
-								patent_id: "",
-								institution: "",
-							},
-						},
-					});
-				}, 500);
-			}}
-		>
+		<Formik initialValues={initialValues} onSubmit={onSubmit}>
 			{({ errors, isSubmitting, touched, handleSubmit }) => {
 				return (
 					<Form onSubmit={handleSubmit}>
@@ -82,7 +72,7 @@ export default function NFTForm() {
 							)}
 						</Field>
 						<Button mt={4} colorScheme="teal" isLoading={isSubmitting} type="submit">
-							Submit
+							Mint IP-NFT
 						</Button>
 					</Form>
 				);
