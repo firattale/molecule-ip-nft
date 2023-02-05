@@ -16,7 +16,17 @@ export default function NFTForm() {
 				setTimeout(() => {
 					console.log(values);
 					actions.setSubmitting(false);
-					actions.resetForm({ values: {} });
+					actions.resetForm({
+						values: {
+							cure: "",
+							researcher: "",
+							university: "",
+							patent_filed: {
+								patent_id: "",
+								institution: "",
+							},
+						},
+					});
 				}, 500);
 			}}
 		>
