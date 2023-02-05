@@ -12,6 +12,12 @@ export const addToBrightlistConfig = {
 	functionName: "addToBrightlist",
 };
 
+export const removeFrombrightlistConfig = {
+	address: contractAddress,
+	abi: abi.abi,
+	functionName: "removeFrombrightlist",
+};
+
 export const mintConfig = {
 	address: contractAddress,
 	abi: abi.abi,
