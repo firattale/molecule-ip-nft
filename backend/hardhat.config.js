@@ -26,3 +26,5 @@ module.exports = {
 		runOnCompile: true,
 	},
 };
+
+// "verify": "npx hardhat verify --network goerli <address>",

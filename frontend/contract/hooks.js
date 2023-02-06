@@ -68,7 +68,6 @@ export const useMintNFT = () => {
 	const { config } = usePrepareContractWrite(mintConfig);
 	const writeConfig = {
 		...config,
-		args: ["", ""],
 		onError(error) {
 			toast({
 				title: "Something went wrong.",

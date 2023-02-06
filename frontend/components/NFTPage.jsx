@@ -4,6 +4,7 @@ import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
 import { useToast, Spinner, Text, Flex, Box, Link } from "@chakra-ui/react";
 import { useMintNFT } from "../contract/hooks";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 const NFTPage = () => {
 	const toast = useToast();
@@ -16,8 +17,7 @@ const NFTPage = () => {
 		}
 	}, []);
 
-	const { mintNFTLoading, mintNFT, mintNFTSuccess, mintNFtData, writeConfig } = useMintNFT();
-	console.log("writeConfig", writeConfig);
+	const { mintNFTLoading, mintNFT, mintNFTSuccess, mintNFTData, writeConfig } = useMintNFT();
 	const onSubmit = async (values, formActions) => {
 		const { cure, ...contractData } = values;
 		//encrypt
@@ -25,8 +25,8 @@ const NFTPage = () => {
 		let ipfsUrl;
 		//ipfs
 		try {
-			// const added = await client.add(ciphertext);
-			ipfsUrl = `https://infura-ipfs.io/ipfs/${"added.path"}`;
+			const added = await client.add(ciphertext);
+			ipfsUrl = `https://infura-ipfs.io/ipfs/${added.path}`;
 			toast({
 				title: "IPFS Upload finished.",
 				description: "We've uploaded your encrypted data to IPFS.",
@@ -46,9 +46,9 @@ const NFTPage = () => {
 				isClosable: true,
 			});
 		}
-		console.log("cure", cure);
-		console.log("ipfsUrl", ipfsUrl);
-		mintNFT?.({ ...writeConfig, args: [cure, ipfsUrl] });
+		mintNFT?.({
+			recklesslySetUnpreparedArgs: [cure, ipfsUrl],
+		});
 
 		formActions.setSubmitting(false);
 		formActions.resetForm({
@@ -63,7 +63,7 @@ const NFTPage = () => {
 				<Flex mb={4} color="teal.500">
 					Successfully minted your NFT!
 					<Box ml={2}>
-						<Link href={`https://goerli.etherscan.io/tx/${mintNFtData?.hash}`} isExternal>
+						<Link href={`https://goerli.etherscan.io/tx/${mintNFTData?.hash}`} isExternal>
 							Goerli Etherscan link <ExternalLinkIcon mx="2px" />
 						</Link>
 					</Box>
