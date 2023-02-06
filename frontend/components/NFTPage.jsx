@@ -1,14 +1,14 @@
 import NFTForm, { initialValues } from "../components/form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
-import { useToast, Spinner, Container } from "@chakra-ui/react";
+import { useToast, Spinner, Container, Text, Flex } from "@chakra-ui/react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { mintConfig } from "../contract";
 
 const NFTPage = () => {
 	const toast = useToast();
-
+	const [key, setKey] = useState("");
 	// Mint NFT function
 	const { config } = usePrepareContractWrite(mintConfig);
 	const { write: mintNFT, isLoading } = useContractWrite({
@@ -76,13 +76,41 @@ const NFTPage = () => {
 			values: initialValues,
 		});
 	};
+	let encryptionKey;
+
+	useEffect(() => {
+		// if (typeof window !== "undefined") {
+		setKey(localStorage.getItem("encryption key")?.toString());
+		// }
+	}, []);
+
 	if (isLoading)
 		return (
 			<Container centerContent>
 				<Spinner size="xl" />
 			</Container>
 		);
-	return <NFTForm onSubmit={onSubmit} />;
+	console.log(key);
+	return (
+		<>
+			<NFTForm onSubmit={onSubmit} />
+			{key.length > 0 ? (
+				<Flex>
+					<Text
+						onClick={() => {
+							navigator.clipboard.writeText(key);
+						}}
+						style={{ cursor: "pointer" }}
+					>
+						Your Encryption Key: {"  "}
+						{key}
+					</Text>
+				</Flex>
+			) : (
+				""
+			)}
+		</>
+	);
 };
 
 export default NFTPage;

@@ -19,7 +19,7 @@ export default function NFTForm({ onSubmit }) {
 	};
 
 	return (
-		<Box w="100%">
+		<Box w="100%" mb={6}>
 			<Formik initialValues={initialValues} onSubmit={onSubmit}>
 				{({ errors, isSubmitting, touched, handleSubmit }) => {
 					return (
