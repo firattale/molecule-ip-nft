@@ -2,6 +2,7 @@ import { Container, Input, InputGroup, InputRightElement, Button, Text, Spinner,
 import { useState } from "react";
 import { usePrepareContractWrite, useContractWrite } from "wagmi";
 import { addToBrightlistConfig, removeFrombrightlistConfig } from "../contract/index";
+
 export default function Brightlist() {
 	const [brightlistValue, setBrightlistValue] = useState("");
 	const [revokeValue, setRevokeValue] = useState("");
@@ -62,11 +63,9 @@ export default function Brightlist() {
 	const handleRevokeChange = (event) => setRevokeValue(event.target.value);
 
 	const handleBrightlistClick = () => {
-		console.log(brightlistValue);
 		addToBrightlist?.();
 	};
 	const handleRevokeClick = () => {
-		console.log(revokeValue);
 		removeFrombrightlist?.();
 	};
 

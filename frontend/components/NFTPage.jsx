@@ -7,9 +7,9 @@ import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { mintConfig } from "../contract";
 
 const NFTPage = () => {
-	const [fileUrl, updateFileUrl] = useState("");
 	const toast = useToast();
 
+	// Mint NFT function
 	const { config } = usePrepareContractWrite(mintConfig);
 	const { write: mintNFT, isLoading } = useContractWrite({
 		...config,
@@ -42,12 +42,12 @@ const NFTPage = () => {
 
 		//encrypt
 		const ciphertext = encryptJSON(contractData);
-
+		let ipfsUrl;
 		//ipfs
 		try {
 			const added = await client.add(ciphertext);
-			const url = `https://infura-ipfs.io/ipfs/${added.path}`;
-			updateFileUrl(url);
+			ipfsUrl = `https://infura-ipfs.io/ipfs/${added.path}`;
+
 			toast({
 				title: "IPFS Upload finished.",
 				description: "We've uploaded your encrypted data to IPFS.",
@@ -68,8 +68,8 @@ const NFTPage = () => {
 			});
 		}
 
-		console.log("fileUrl", fileUrl);
-		mintNFT?.(cure, fileUrl);
+		console.log("ipfsUrl", ipfsUrl);
+		mintNFT?.(cure, ipfsUrl);
 
 		formActions.setSubmitting(false);
 		formActions.resetForm({

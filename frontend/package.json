@@ -6,8 +6,7 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-		"lint": "next link",
-		"marketplace": "npx create-web3-dapp marketplace"
+		"lint": "next link"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^2.4.9",
