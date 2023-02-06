@@ -3,38 +3,42 @@ import { useState, useEffect } from "react";
 import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
 import { useToast, Spinner, Container, Text, Flex } from "@chakra-ui/react";
-import { useContractWrite, usePrepareContractWrite } from "wagmi";
+import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
 import { mintConfig } from "../contract";
 
 const NFTPage = () => {
 	const toast = useToast();
 	const [key, setKey] = useState("");
 	// Mint NFT function
-	const { config } = usePrepareContractWrite(mintConfig);
-	const { write: mintNFT, isLoading } = useContractWrite({
+	const { data, config } = usePrepareContractWrite({ ...mintConfig, args: ["", ""] });
+	const { write: mintNFT } = useContractWrite({
 		...config,
-		onSuccess(data) {
-			toast({
-				title: "NFT minted.",
-				description: "We've successfully minted your IP_NFT.",
-				status: "success",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-			console.log("Success", data);
-		},
-		onError(error) {
-			toast({
-				title: "Something went wrong.",
-				description: "We couldn't minted your NFT, please refresh and try again.",
-				status: "error",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-			console.log("Error", error.message);
-		},
+		// onSuccess(data) {
+		// 	toast({
+		// 		title: "NFT minted.",
+		// 		description: "We've successfully minted your IP_NFT.",
+		// 		status: "success",
+		// 		duration: 8000,
+		// 		position: "top",
+		// 		isClosable: true,
+		// 	});
+		// 	console.log("Success", data);
+		// },
+		// onError(error) {
+		// 	toast({
+		// 		title: "Something went wrong.",
+		// 		description: "We couldn't minted your NFT, please refresh and try again.",
+		// 		status: "error",
+		// 		duration: 8000,
+		// 		position: "top",
+		// 		isClosable: true,
+		// 	});
+		// 	console.log("Error", error.message);
+		// },
+	});
+
+	const { isLoading, isSuccess } = useWaitForTransaction({
+		hash: data?.hash,
 	});
 
 	const onSubmit = async (values, formActions) => {
@@ -76,14 +80,21 @@ const NFTPage = () => {
 			values: initialValues,
 		});
 	};
-	let encryptionKey;
 
 	useEffect(() => {
-		// if (typeof window !== "undefined") {
 		setKey(localStorage.getItem("encryption key")?.toString());
-		// }
 	}, []);
 
+	// useEffect(() => {
+	// 	toast({
+	// 		title: "NFT minted.",
+	// 		description: "We've successfully minted your IP_NFT.",
+	// 		status: "success",
+	// 		duration: 8000,
+	// 		position: "top",
+	// 		isClosable: true,
+	// 	});
+	// }, [isSuccess]);
 	if (isLoading)
 		return (
 			<Container centerContent>
@@ -93,17 +104,31 @@ const NFTPage = () => {
 	console.log(key);
 	return (
 		<>
+			{isSuccess && (
+				<div>
+					Successfully minted your NFT!
+					<div>
+						<a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
+					</div>
+				</div>
+			)}
 			<NFTForm onSubmit={onSubmit} />
 			{key.length > 0 ? (
 				<Flex>
 					<Text
+						cursor="pointer"
+						whiteSpace="pre"
 						onClick={() => {
 							navigator.clipboard.writeText(key);
+							toast({
+								title: `Copied`,
+								status: "info",
+								isClosable: true,
+								position: "top",
+							});
 						}}
-						style={{ cursor: "pointer" }}
 					>
-						Your Encryption Key: {"  "}
-						{key}
+						Your Encryption Key: {key}
 					</Text>
 				</Flex>
 			) : (
