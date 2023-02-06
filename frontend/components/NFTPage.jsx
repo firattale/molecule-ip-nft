@@ -2,7 +2,7 @@ import NFTForm, { initialValues } from "../components/form";
 import { useState } from "react";
 import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
-import { useToast, Spinner } from "@chakra-ui/react";
+import { useToast, Spinner, Container } from "@chakra-ui/react";
 import { useContractWrite, usePrepareContractWrite } from "wagmi";
 import { mintConfig } from "../contract";
 
@@ -45,8 +45,8 @@ const NFTPage = () => {
 
 		//ipfs
 		try {
-			// const added = await client.add(ciphertext);
-			const url = `https://infura-ipfs.io/ipfs/${"added.path"}`;
+			const added = await client.add(ciphertext);
+			const url = `https://infura-ipfs.io/ipfs/${added.path}`;
 			updateFileUrl(url);
 			toast({
 				title: "IPFS Upload finished.",
@@ -75,7 +75,6 @@ const NFTPage = () => {
 		formActions.resetForm({
 			values: initialValues,
 		});
-		// console.log("data", data);
 	};
 	if (isLoading)
 		return (
