@@ -2,48 +2,23 @@ import NFTForm, { initialValues } from "../components/form";
 import { useState, useEffect } from "react";
 import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
-import { useToast, Spinner, Container, Text, Flex } from "@chakra-ui/react";
-import { useContractWrite, usePrepareContractWrite, useWaitForTransaction } from "wagmi";
-import { mintConfig } from "../contract";
+import { useToast, Spinner, Container, Text, Flex, Box, Link } from "@chakra-ui/react";
+import { useMintNFT } from "../contract/hooks";
 
 const NFTPage = () => {
 	const toast = useToast();
 	const [key, setKey] = useState("");
-	// Mint NFT function
-	const { data, config } = usePrepareContractWrite({ ...mintConfig, args: ["", ""] });
-	const { write: mintNFT } = useContractWrite({
-		...config,
-		// onSuccess(data) {
-		// 	toast({
-		// 		title: "NFT minted.",
-		// 		description: "We've successfully minted your IP_NFT.",
-		// 		status: "success",
-		// 		duration: 8000,
-		// 		position: "top",
-		// 		isClosable: true,
-		// 	});
-		// 	console.log("Success", data);
-		// },
-		// onError(error) {
-		// 	toast({
-		// 		title: "Something went wrong.",
-		// 		description: "We couldn't minted your NFT, please refresh and try again.",
-		// 		status: "error",
-		// 		duration: 8000,
-		// 		position: "top",
-		// 		isClosable: true,
-		// 	});
-		// 	console.log("Error", error.message);
-		// },
-	});
+	const [description, setDescription] = useState("");
+	const [url, setIpfsUrl] = useState("");
+	useEffect(() => {
+		setKey(localStorage.getItem("encryption key")?.toString());
+	}, []);
 
-	const { isLoading, isSuccess } = useWaitForTransaction({
-		hash: data?.hash,
-	});
-	console.log("isSuccess", isSuccess);
+	const { mintNFTLoading, mintNFT, mintNFtSuccess, mintNFtData } = useMintNFT(description, url);
+
 	const onSubmit = async (values, formActions) => {
 		const { cure, ...contractData } = values;
-
+		setDescription(cure);
 		//encrypt
 		const ciphertext = encryptJSON(contractData);
 		let ipfsUrl;
@@ -51,7 +26,7 @@ const NFTPage = () => {
 		try {
 			const added = await client.add(ciphertext);
 			ipfsUrl = `https://infura-ipfs.io/ipfs/${added.path}`;
-
+			setIpfsUrl(ipfsUrl);
 			toast({
 				title: "IPFS Upload finished.",
 				description: "We've uploaded your encrypted data to IPFS.",
@@ -71,8 +46,9 @@ const NFTPage = () => {
 				isClosable: true,
 			});
 		}
-
-		mintNFT?.(cure, ipfsUrl);
+		console.log("description", description);
+		console.log("url", url);
+		mintNFT?.();
 
 		formActions.setSubmitting(false);
 		formActions.resetForm({
@@ -80,21 +56,7 @@ const NFTPage = () => {
 		});
 	};
 
-	useEffect(() => {
-		setKey(localStorage.getItem("encryption key")?.toString());
-	}, []);
-
-	// useEffect(() => {
-	// 	toast({
-	// 		title: "NFT minted.",
-	// 		description: "We've successfully minted your IP_NFT.",
-	// 		status: "success",
-	// 		duration: 8000,
-	// 		position: "top",
-	// 		isClosable: true,
-	// 	});
-	// }, [isSuccess]);
-	if (isLoading)
+	if (mintNFTLoading)
 		return (
 			<Container centerContent>
 				<Spinner size="xl" />
@@ -102,13 +64,15 @@ const NFTPage = () => {
 		);
 	return (
 		<>
-			{isSuccess && (
-				<div>
+			{mintNFtSuccess && (
+				<Flex mb={4} color="teal.500">
 					Successfully minted your NFT!
-					<div>
-						<a href={`https://etherscan.io/tx/${data?.hash}`}>Etherscan</a>
-					</div>
-				</div>
+					<Box ml={2}>
+						<Link href={`https://goerli.etherscan.io/tx/${mintNFtData?.hash}`} isExternal>
+							Goerli Etherscan link <ExternalLinkIcon mx="2px" />
+						</Link>
+					</Box>
+				</Flex>
 			)}
 			<NFTForm onSubmit={onSubmit} />
 			{key?.length > 0 ? (

@@ -1,4 +1,4 @@
-import { addToBrightlistConfig, removeFrombrightlistConfig } from "./index";
+import { addToBrightlistConfig, removeFrombrightlistConfig, mintConfig } from "./index";
 import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from "wagmi";
 import { useToast } from "@chakra-ui/react";
 
@@ -8,16 +8,6 @@ export const useAddBrightlist = (brightlistValue) => {
 	const { config } = usePrepareContractWrite({ ...addToBrightlistConfig, args: [brightlistValue] });
 	const { write, data } = useContractWrite({
 		...config,
-		onSuccess(data) {
-			console.log("Success", data);
-			toast({
-				description: "The user successfully brightlisted.",
-				status: "success",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-		},
 		onError(error) {
 			toast({
 				title: "Something went wrong.",
@@ -48,16 +38,6 @@ export const useRemoveFromBrightlist = (revokeValue) => {
 	const { config } = usePrepareContractWrite({ ...removeFrombrightlistConfig, args: [revokeValue] });
 	const { write, data } = useContractWrite({
 		...config,
-		onSuccess(data) {
-			console.log("Success", data);
-			toast({
-				description: "The user successfully removed from brightlist.",
-				status: "success",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-		},
 		onError(error) {
 			toast({
 				title: "Something went wrong.",
@@ -79,5 +59,35 @@ export const useRemoveFromBrightlist = (revokeValue) => {
 		removeFromBrightlist: write,
 		removeFromBrightListSuccess: isSuccess,
 		removeFromBrightListData: data,
+	};
+};
+
+export const useMintNFT = (description, contractData) => {
+	const toast = useToast();
+
+	const { config } = usePrepareContractWrite({ ...mintConfig, args: [description, contractData] });
+	const { write, data } = useContractWrite({
+		...config,
+		onError(error) {
+			toast({
+				title: "Something went wrong.",
+				description: "The NFT can't be minted.",
+				status: "error",
+				duration: 8000,
+				position: "top",
+				isClosable: true,
+			});
+			console.log("Error", error.message);
+		},
+	});
+
+	const { isLoading, isSuccess } = useWaitForTransaction({
+		hash: data?.hash,
+	});
+	return {
+		mintNFTLoading: isLoading,
+		mintNFT: write,
+		mintNFTSuccess: isSuccess,
+		mintNFTData: data,
 	};
 };
