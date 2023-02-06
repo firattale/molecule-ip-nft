@@ -27,7 +27,7 @@ contract IP_NFTContract is Ownable, ERC721URIStorage {
     event NewToken(address indexed _minter, uint256 indexed tokenId);
 
     modifier hasBrightlisted() {
-        require(brightlist[_msgSender()], "NOT_IN_WHITELIST");
+        require(brightlist[_msgSender()], "NOT_IN_BRIGHTLIST");
         _;
     }
 

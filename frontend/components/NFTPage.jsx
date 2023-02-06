@@ -2,31 +2,31 @@ import NFTForm, { initialValues } from "../components/form";
 import { useState, useEffect } from "react";
 import { encryptJSON } from "../utils/crypto";
 import { client } from "../api/ipfs";
-import { useToast, Spinner, Container, Text, Flex, Box, Link } from "@chakra-ui/react";
+import { useToast, Spinner, Text, Flex, Box, Link } from "@chakra-ui/react";
 import { useMintNFT } from "../contract/hooks";
 
 const NFTPage = () => {
 	const toast = useToast();
 	const [key, setKey] = useState("");
-	const [description, setDescription] = useState("");
-	const [url, setIpfsUrl] = useState("");
+
 	useEffect(() => {
-		setKey(localStorage.getItem("encryption key")?.toString());
+		const key = localStorage.getItem("encryption key");
+		if (key) {
+			setKey(key.toString());
+		}
 	}, []);
 
-	const { mintNFTLoading, mintNFT, mintNFtSuccess, mintNFtData } = useMintNFT(description, url);
-
+	const { mintNFTLoading, mintNFT, mintNFTSuccess, mintNFtData, writeConfig } = useMintNFT();
+	console.log("writeConfig", writeConfig);
 	const onSubmit = async (values, formActions) => {
 		const { cure, ...contractData } = values;
-		setDescription(cure);
 		//encrypt
 		const ciphertext = encryptJSON(contractData);
 		let ipfsUrl;
 		//ipfs
 		try {
-			const added = await client.add(ciphertext);
-			ipfsUrl = `https://infura-ipfs.io/ipfs/${added.path}`;
-			setIpfsUrl(ipfsUrl);
+			// const added = await client.add(ciphertext);
+			ipfsUrl = `https://infura-ipfs.io/ipfs/${"added.path"}`;
 			toast({
 				title: "IPFS Upload finished.",
 				description: "We've uploaded your encrypted data to IPFS.",
@@ -46,9 +46,9 @@ const NFTPage = () => {
 				isClosable: true,
 			});
 		}
-		console.log("description", description);
-		console.log("url", url);
-		mintNFT?.();
+		console.log("cure", cure);
+		console.log("ipfsUrl", ipfsUrl);
+		mintNFT?.({ ...writeConfig, args: [cure, ipfsUrl] });
 
 		formActions.setSubmitting(false);
 		formActions.resetForm({
@@ -56,15 +56,10 @@ const NFTPage = () => {
 		});
 	};
 
-	if (mintNFTLoading)
-		return (
-			<Container centerContent>
-				<Spinner size="xl" />
-			</Container>
-		);
+	if (mintNFTLoading) return <Spinner size="xl" />;
 	return (
 		<>
-			{mintNFtSuccess && (
+			{mintNFTSuccess && (
 				<Flex mb={4} color="teal.500">
 					Successfully minted your NFT!
 					<Box ml={2}>

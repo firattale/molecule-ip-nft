@@ -14,14 +14,19 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 import { useState } from "react";
 import { useAddBrightlist, useRemoveFromBrightlist } from "../contract/hooks";
+import { useDebounce } from "usehooks-ts";
 
 export default function Brightlist() {
 	const [brightlistValue, setBrightlistValue] = useState("");
+	const debouncedBrightlistValue = useDebounce(brightlistValue, 500);
+
 	const [revokeValue, setRevokeValue] = useState("");
+	const debouncedRevokeValue = useDebounce(revokeValue, 500);
+
 	const { addToBrightlist, addToBrightlistLoading, addToBrightlistSuccess, addToBrightlistData } =
-		useAddBrightlist(brightlistValue);
+		useAddBrightlist(debouncedBrightlistValue);
 	const { removeFromBrightlistLoading, removeFromBrightlist, removeFromBrightListSuccess, removeFromBrightListData } =
-		useRemoveFromBrightlist(revokeValue);
+		useRemoveFromBrightlist(debouncedRevokeValue);
 
 	const handleBrightlistChange = (event) => setBrightlistValue(event.target.value);
 	const handleRevokeChange = (event) => setRevokeValue(event.target.value);

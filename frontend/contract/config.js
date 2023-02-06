@@ -1,5 +1,6 @@
-export const contractAddress = "0x59c90eF64Ab67a5760531B84497F9B5562902771";
 import abi from "../../backend/artifacts/contracts/IPNFTContract.sol/IP_NFTContract.json";
+
+export const contractAddress = "0x598e6025ef7bd45d3C16e49cEAD88b8a94549B91";
 
 export const brightlistConfig = {
 	address: contractAddress,

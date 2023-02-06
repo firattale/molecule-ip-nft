@@ -1,4 +1,4 @@
-import { addToBrightlistConfig, removeFrombrightlistConfig, mintConfig } from "./index";
+import { addToBrightlistConfig, removeFrombrightlistConfig, mintConfig } from "./config";
 import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from "wagmi";
 import { useToast } from "@chakra-ui/react";
 
@@ -62,12 +62,13 @@ export const useRemoveFromBrightlist = (revokeValue) => {
 	};
 };
 
-export const useMintNFT = (description, contractData) => {
+export const useMintNFT = () => {
 	const toast = useToast();
 
-	const { config } = usePrepareContractWrite({ ...mintConfig, args: [description, contractData] });
-	const { write, data } = useContractWrite({
+	const { config } = usePrepareContractWrite(mintConfig);
+	const writeConfig = {
 		...config,
+		args: ["", ""],
 		onError(error) {
 			toast({
 				title: "Something went wrong.",
@@ -79,7 +80,8 @@ export const useMintNFT = (description, contractData) => {
 			});
 			console.log("Error", error.message);
 		},
-	});
+	};
+	const { write, data } = useContractWrite(writeConfig);
 
 	const { isLoading, isSuccess } = useWaitForTransaction({
 		hash: data?.hash,
@@ -89,5 +91,6 @@ export const useMintNFT = (description, contractData) => {
 		mintNFT: write,
 		mintNFTSuccess: isSuccess,
 		mintNFTData: data,
+		writeConfig: config,
 	};
 };

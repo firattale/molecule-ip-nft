@@ -49,7 +49,7 @@ describe("IP-NFT Contract", function () {
 			const { nftContract, account2 } = await loadFixture(deployFixtures);
 
 			await expect(nftContract.connect(account2).safeMint("cancer", "ipfs://contractData")).to.be.revertedWith(
-				"NOT_IN_WHITELIST"
+				"NOT_IN_BRIGHTLIST"
 			);
 		});
 
@@ -75,7 +75,7 @@ describe("IP-NFT Contract", function () {
 			await nftContract.connect(account2).safeMint("cancer", "ipfs://contractData");
 
 			await expect(nftContract.connect(account2).safeMint("cancer", "ipfs://contractData")).to.be.revertedWith(
-				"NOT_IN_WHITELIST"
+				"NOT_IN_BRIGHTLIST"
 			);
 		});
 	});
