@@ -40,7 +40,7 @@ const NFTPage = () => {
 	const { isLoading, isSuccess } = useWaitForTransaction({
 		hash: data?.hash,
 	});
-
+	console.log("isSuccess", isSuccess);
 	const onSubmit = async (values, formActions) => {
 		const { cure, ...contractData } = values;
 
@@ -72,7 +72,6 @@ const NFTPage = () => {
 			});
 		}
 
-		console.log("ipfsUrl", ipfsUrl);
 		mintNFT?.(cure, ipfsUrl);
 
 		formActions.setSubmitting(false);
@@ -101,7 +100,6 @@ const NFTPage = () => {
 				<Spinner size="xl" />
 			</Container>
 		);
-	console.log(key);
 	return (
 		<>
 			{isSuccess && (
@@ -113,7 +111,7 @@ const NFTPage = () => {
 				</div>
 			)}
 			<NFTForm onSubmit={onSubmit} />
-			{key.length > 0 ? (
+			{key?.length > 0 ? (
 				<Flex>
 					<Text
 						cursor="pointer"

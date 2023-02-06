@@ -1,63 +1,27 @@
-import { Container, Input, InputGroup, InputRightElement, Button, Text, Spinner, useToast } from "@chakra-ui/react";
+import {
+	Container,
+	Input,
+	InputGroup,
+	InputRightElement,
+	Flex,
+	Button,
+	Text,
+	Spinner,
+	Box,
+	Link,
+} from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+
 import { useState } from "react";
-import { usePrepareContractWrite, useContractWrite } from "wagmi";
-import { addToBrightlistConfig, removeFrombrightlistConfig } from "../contract/index";
+import { useAddBrightlist, useRemoveFromBrightlist } from "../contract/hooks";
 
 export default function Brightlist() {
 	const [brightlistValue, setBrightlistValue] = useState("");
 	const [revokeValue, setRevokeValue] = useState("");
-	const toast = useToast();
-
-	const { config } = usePrepareContractWrite({ ...addToBrightlistConfig, args: [brightlistValue] });
-	const { config: secondConfig } = usePrepareContractWrite({ ...removeFrombrightlistConfig, args: [revokeValue] });
-	const { isLoading, write: addToBrightlist } = useContractWrite({
-		...config,
-		onSuccess(data) {
-			console.log("Success", data);
-			toast({
-				description: "The user successfully brightlisted.",
-				status: "success",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-		},
-		onError(error) {
-			toast({
-				title: "Something went wrong.",
-				description: "The user can't be brightlisted.",
-				status: "error",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-			console.log("Error", error.message);
-		},
-	});
-	const { isLoading: removeFrombrightlistLoading, write: removeFrombrightlist } = useContractWrite({
-		...secondConfig,
-		onSuccess(data) {
-			console.log("Success", data);
-			toast({
-				description: "The user successfully removed from brightlist.",
-				status: "success",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-		},
-		onError(error) {
-			toast({
-				title: "Something went wrong.",
-				description: "The user can't be removed from brightlist.",
-				status: "error",
-				duration: 8000,
-				position: "top",
-				isClosable: true,
-			});
-			console.log("Error", error.message);
-		},
-	});
+	const { addToBrightlist, addToBrightlistLoading, addToBrightlistSuccess, addToBrightlistData } =
+		useAddBrightlist(brightlistValue);
+	const { removeFromBrightlistLoading, removeFromBrightlist, removeFromBrightListSuccess, removeFromBrightListData } =
+		useRemoveFromBrightlist(revokeValue);
 
 	const handleBrightlistChange = (event) => setBrightlistValue(event.target.value);
 	const handleRevokeChange = (event) => setRevokeValue(event.target.value);
@@ -66,10 +30,10 @@ export default function Brightlist() {
 		addToBrightlist?.();
 	};
 	const handleRevokeClick = () => {
-		removeFrombrightlist?.();
+		removeFromBrightlist?.();
 	};
 
-	if (isLoading || removeFrombrightlistLoading)
+	if (addToBrightlistLoading || removeFromBrightlistLoading)
 		return (
 			<Container centerContent>
 				<Spinner size="xl" />
@@ -79,6 +43,26 @@ export default function Brightlist() {
 	return (
 		<Container centerContent>
 			<Text mb={4}>Brightlist Page</Text>
+			{addToBrightlistSuccess && (
+				<Flex mb={4} color="teal.500">
+					User successfully brightlisted!
+					<Box ml={2}>
+						<Link href={`https://goerli.etherscan.io/tx/${addToBrightlistData?.hash}`} isExternal>
+							Goerli Etherscan link <ExternalLinkIcon mx="2px" />
+						</Link>
+					</Box>
+				</Flex>
+			)}
+			{removeFromBrightListSuccess && (
+				<Flex mb={4} color="teal.500">
+					User successfully revoked!
+					<Box ml={2}>
+						<Link href={`https://goerli.etherscan.io/tx/${removeFromBrightListData?.hash}`} isExternal>
+							Goerli Etherscan link <ExternalLinkIcon mx="2px" />
+						</Link>
+					</Box>
+				</Flex>
+			)}
 			<InputGroup size="md" mb={4}>
 				<Input pr="4.5rem" type="text" placeholder="0x..." onChange={handleBrightlistChange} />
 				<InputRightElement width="4.5rem">
