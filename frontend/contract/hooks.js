@@ -68,6 +68,7 @@ export const useMintNFT = () => {
 	const { config } = usePrepareContractWrite(mintConfig);
 	const writeConfig = {
 		...config,
+		args: ["", ""],
 		onError(error) {
 			toast({
 				title: "Something went wrong.",
@@ -80,14 +81,14 @@ export const useMintNFT = () => {
 			console.log("Error", error.message);
 		},
 	};
-	const { write, data } = useContractWrite(writeConfig);
+	const { writeAsync, data } = useContractWrite(writeConfig);
 
 	const { isLoading, isSuccess } = useWaitForTransaction({
 		hash: data?.hash,
 	});
 	return {
 		mintNFTLoading: isLoading,
-		mintNFT: write,
+		mintNFT: writeAsync,
 		mintNFTSuccess: isSuccess,
 		mintNFTData: data,
 		writeConfig: config,

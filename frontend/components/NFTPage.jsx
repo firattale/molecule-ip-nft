@@ -25,8 +25,8 @@ const NFTPage = () => {
 		let ipfsUrl;
 		//ipfs
 		try {
-			const added = await client.add(ciphertext);
-			ipfsUrl = `https://infura-ipfs.io/ipfs/${added.path}`;
+			// const added = await client.add(ciphertext);
+			ipfsUrl = `https://infura-ipfs.io/ipfs/${"added.path"}`;
 			toast({
 				title: "IPFS Upload finished.",
 				description: "We've uploaded your encrypted data to IPFS.",
@@ -46,10 +46,11 @@ const NFTPage = () => {
 				isClosable: true,
 			});
 		}
+		console.log("cure", cure);
+		console.log("ipfsUrl", ipfsUrl);
 		mintNFT?.({
 			recklesslySetUnpreparedArgs: [cure, ipfsUrl],
 		});
-
 		formActions.setSubmitting(false);
 		formActions.resetForm({
 			values: initialValues,

@@ -114,8 +114,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Lock files
-package-lock.json
-
 templates/evm/core/pages/api
 frontend/.env.local
