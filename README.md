@@ -4,6 +4,14 @@ This a project to mint IP-NFTs and support researches. Any brightlisted research
 
 You need to create your Alchemy and Infura account keys.
 
+Project link: https://molecule-ip-nft.vercel.app/
+
+Goerli Etherscan link: https://goerli.etherscan.io/address/0x8b9FfeB16CbFe9e21ACb20e2e4cd8df3a8e03680
+
+One NFT already minted, you can check from the tokenURI under https://goerli.etherscan.io/address/0x8b9FfeB16CbFe9e21ACb20e2e4cd8df3a8e03680#readContract
+
+Contact me to brightlist your address.
+
 ## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env.local file in frontend folder and .env file in backend folder. You can find example env variables under env.example file.
