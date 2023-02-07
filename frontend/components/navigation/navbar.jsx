@@ -10,7 +10,7 @@ export default function Navbar() {
 		<nav className={styles.navbar}>
 			<Flex alignItems={"center"}>
 				<Link href="/">
-					<img className={styles.molecule_logo} src="/molecule_logo.svg"></img>
+					<img data-selector="logo" className={styles.molecule_logo} src="/molecule_logo.svg"></img>
 				</Link>
 				{/* {isOwner && ( */}
 				<Breadcrumb separator="-" ml={8}>
@@ -20,7 +20,7 @@ export default function Navbar() {
 				</Breadcrumb>
 				{/* )} */}
 			</Flex>
-			<ConnectButton />
+			<ConnectButton data-selector="Connect Button" />
 		</nav>
 	);
 }

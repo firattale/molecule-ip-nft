@@ -69,17 +69,23 @@ export default function Brightlist() {
 				</Flex>
 			)}
 			<InputGroup size="md" mb={4}>
-				<Input pr="4.5rem" type="text" placeholder="0x..." onChange={handleBrightlistChange} />
+				<Input
+					pr="4.5rem"
+					type="text"
+					placeholder="0x..."
+					onChange={handleBrightlistChange}
+					data-selector="brightListInput"
+				/>
 				<InputRightElement width="4.5rem">
-					<Button h="1.75rem" size="sm" onClick={handleBrightlistClick}>
+					<Button h="1.75rem" size="sm" onClick={handleBrightlistClick} data-selector="brightlistButton">
 						Brightlist
 					</Button>
 				</InputRightElement>
 			</InputGroup>
 			<InputGroup size="md">
-				<Input pr="4.5rem" type="text" placeholder="0x..." onChange={handleRevokeChange} />
+				<Input pr="4.5rem" type="text" placeholder="0x..." onChange={handleRevokeChange} data-selector="revokeInput" />
 				<InputRightElement width="4.5rem">
-					<Button h="1.75rem" size="sm" onClick={handleRevokeClick}>
+					<Button h="1.75rem" size="sm" onClick={handleRevokeClick} data-selector="revokeButton">
 						Revoke
 					</Button>
 				</InputRightElement>
