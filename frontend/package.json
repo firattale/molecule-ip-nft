@@ -7,7 +7,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next link",
-		"cypress": "cypress open"
+		"e2e": "cypress open"
 	},
 	"dependencies": {
 		"@chakra-ui/icons": "^2.0.17",

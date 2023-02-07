@@ -78,6 +78,36 @@ To deploy this project's smart contract, get into the backend folder and run:
   Hardhat: npm run deploy-local
 ```
 
+## Testing
+
+#### Backend Testing
+
+Smart contract testing under backend folder:
+
+```bash
+ npm run test
+```
+
+Smart contract coverage:
+
+```bash
+ npm run coverage
+```
+
+#### Frontend Testing
+
+Run FE locally:
+
+```bash
+ npm run dev
+```
+
+Run E2E test:
+
+```bash
+ npm run e2e
+```
+
 ## FAQ
 
 #### How can I add my locally running Hardhat account to Metamask?
@@ -96,10 +126,10 @@ https://support.chainstack.com/hc/en-us/articles/4408642503449-Using-MetaMask-wi
 - Add Typescript and add Synpress to interact with Metamask e2e tests to Frontend
   https://github.com/Synthetixio/synpress
 
-## Authors
-
-- [@firattale](https://www.github.com/firattale)
-
 ## Documentation
 
 [Documentation](https://github.com/firattale/molecule-ip-nft/tree/main/backend/docs)
+
+## Authors
+
+- [@firattale](https://www.github.com/firattale)
