@@ -25,7 +25,7 @@ const NFTPage = () => {
 		let ipfsUrl;
 		//ipfs
 		try {
-			// const added = await client.add(ciphertext);
+			const added = await client.add(ciphertext);
 			ipfsUrl = `https://infura-ipfs.io/ipfs/${"added.path"}`;
 			toast({
 				title: "IPFS Upload finished.",
