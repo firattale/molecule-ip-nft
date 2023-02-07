@@ -46,8 +46,7 @@ const NFTPage = () => {
 				isClosable: true,
 			});
 		}
-		console.log("cure", cure);
-		console.log("ipfsUrl", ipfsUrl);
+
 		mintNFT?.({
 			recklesslySetUnpreparedArgs: [cure, ipfsUrl],
 		});
